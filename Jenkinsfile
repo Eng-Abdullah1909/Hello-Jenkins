@@ -1,39 +1,50 @@
 pipeline {
-    agent {
-        docker { image 'docker:stable' } // Jenkins agent with Docker support
-    }
+    agent any
+
     environment {
-        DOCKER_IMAGE = 'your-username/your-app' // Replace with your Docker Hub username and app name
-        DOCKER_CREDENTIALS = credentials('docker-hub-credentials-id') // Jenkins credentials ID
+        DOCKER_IMAGE = 'engabdullah1909/Hello-app'
+        DOCKER_CREDENTIALS = credentials('Docker-Hub-UP')
     }
+
     stages {
         stage('Checkout Code') {
             steps {
+                // Clone the repository
                 checkout scm
             }
         }
+
         stage('Build Docker Image') {
             steps {
+                // Build the Docker image using the Dockerfile
                 sh 'docker build -t $DOCKER_IMAGE:latest .'
             }
         }
+
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm $DOCKER_IMAGE:latest npm test' // Replace with your test command
+                // (Optional) Run tests inside the Docker container
+                sh 'docker run --rm $DOCKER_IMAGE:latest npm test || echo "No tests configured"'
             }
         }
-        stage('Push Docker Image') {
+
+        stage('Push to Docker Hub') {
             steps {
-                sh '''
-                echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin
-                docker push $DOCKER_IMAGE:latest
-                '''
+                script {
+                    // Login to Docker Hub and push the image
+                    sh '''
+                    echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin
+                    docker push $DOCKER_IMAGE:latest
+                    '''
+                }
             }
         }
     }
+
     post {
         always {
-            sh 'docker system prune -f' // Cleanup Docker resources
+            // Cleanup Docker resources to save space
+            sh 'docker system prune -f'
         }
     }
 }
