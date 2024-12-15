@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'engabdullah1909/Hello-app'
+        DOCKER_IMAGE = 'engabdullah1909/my-repo'
         DOCKER_CREDENTIALS = credentials('Docker-Hub-UP')
     }
 
