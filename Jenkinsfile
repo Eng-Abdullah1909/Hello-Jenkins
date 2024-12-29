@@ -7,13 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Clone the repository
-                checkout scm
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 // Build the Docker image using the Dockerfile
