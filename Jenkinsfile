@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'engabdullah1909/DEPI-proect'
+        DOCKER_IMAGE = 'engabdullah1909/depi-proect'
         DOCKER_CREDENTIALS = credentials('Docker-Hub-UP')
     }
 
